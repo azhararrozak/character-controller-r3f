@@ -1,6 +1,14 @@
 import { Canvas } from "@react-three/fiber";
 import { Experience } from "./components/Experience";
 
+const keyboardMap = [
+  { name: "forward", keys: ["ArrowUp", "KeyW"] },
+  { name: "backward", keys: ["ArrowDown", "KeyS"] },
+  { name: "left", keys: ["ArrowLeft", "KeyA"] },
+  { name: "right", keys: ["ArrowRight", "KeyD"] },
+  { name: "run", keys: ["Shift"] },
+]
+
 function App() {
   return (
     <Canvas
