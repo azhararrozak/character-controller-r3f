@@ -7,6 +7,27 @@ import { useControls } from "leva";
 import { useKeyboardControls } from "@react-three/drei";
 import { degToRad } from "three/src/math/MathUtils.js";
 
+const normalizeAngle = (angle) => {
+    while (angle > Math.PI) angle -= 2 * Math.PI;
+    while (angle < -Math.PI) angle += 2 * Math.PI;
+    return angle;
+  };
+  
+  const lerpAngle = (start, end, t) => {
+    start = normalizeAngle(start);
+    end = normalizeAngle(end);
+  
+    if (Math.abs(end - start) > Math.PI) {
+      if (end > start) {
+        start += 2 * Math.PI;
+      } else {
+        end += 2 * Math.PI;
+      }
+    }
+  
+    return normalizeAngle(start + (end - start) * t);
+  };
+
 export const CharacterController = () => {
   const { WALK_SPEED, RUN_SPEED, ROTATION_SPEED } = useControls("Character Control", {
     WALK_SPEED: { value: 0.8, min: 0.1, max: 4, step: 0.1 },
@@ -65,8 +86,8 @@ export const CharacterController = () => {
         vel.z = Math.cos(rotationTarget.current + characterRotationTarget.current) * speed;
         //vel.z = speed * movement.z;
       }
-      
-      character.current.rotation.y = MathUtils.lerp(
+
+      character.current.rotation.y = lerpAngle(
         character.current.rotation.y,
         characterRotationTarget.current,
         0.1
