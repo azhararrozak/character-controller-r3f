@@ -63,6 +63,10 @@ export const Experience = () => {
           attach={"shadow-camera"}
         />
       </directionalLight>
+      {/*
+      With Debug Mode
+      <Physics debug key={map}>
+      */}
       <Physics key={map}>
       <Map
         scale={maps[map].scale}
