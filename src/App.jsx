@@ -16,6 +16,9 @@ function App() {
     <Canvas
       shadows
       camera={{ position: [3, 3, 3], near: 0.1, fov: 40 }}
+      style={{
+        touchAction: "none",
+      }}
     >
       <color attach="background" args={["#ececec"]} />
       <Experience />

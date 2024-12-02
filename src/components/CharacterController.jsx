@@ -61,16 +61,29 @@ export const CharacterController = () => {
   const [, get] = useKeyboardControls()
 
 
-  //MouseControl
+  //MouseControl and TouchControl
   useEffect(() => {
     const onMouseDown = (e) => {
       isClicking.current = true;
     }; 
     const onMouseUp = (e) => {
       isClicking.current = false;
-    }
+    };
+
+    //mouse
     document.addEventListener("mousedown", onMouseDown);
     document.addEventListener("mouseup", onMouseUp);
+
+    //touch
+    document.addEventListener("touchstart", onMouseDown);
+    document.addEventListener("touchend", onMouseUp);
+
+    return() => {
+      document.removeEventListener("mousedown", onMouseDown);
+      document.removeEventListener("mouseup", onMouseUp);
+      document.removeEventListener("touchstart", onMouseDown);
+      document.removeEventListener("touchend", onMouseUp);
+    }
   }, [])
 
   useFrame(({ camera, mouse }) => {
