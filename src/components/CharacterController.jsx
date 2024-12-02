@@ -1,6 +1,6 @@
 import { CapsuleCollider, RigidBody } from "@react-three/rapier";
 import { Character } from "./Character";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MathUtils, Vector3 } from "three";
 import { useFrame } from "@react-three/fiber";
 import { useControls } from "leva";
@@ -54,9 +54,26 @@ export const CharacterController = () => {
   const cameraWorldPosition = useRef(new Vector3());
   const cameraLookAtWorldPosition = useRef(new Vector3());
   const cameraLookAt = useRef(new Vector3());
+
+  //MouseControl
+  const isClicking = useRef(false);
+
   const [, get] = useKeyboardControls()
 
-  useFrame(({ camera }) => {
+
+  //MouseControl
+  useEffect(() => {
+    const onMouseDown = (e) => {
+      isClicking.current = true;
+    }; 
+    const onMouseUp = (e) => {
+      isClicking.current = false;
+    }
+    document.addEventListener("mousedown", onMouseDown);
+    document.addEventListener("mouseup", onMouseUp);
+  }, [])
+
+  useFrame(({ camera, mouse }) => {
     if (rb.current) {
       const vel = rb.current.linvel();
 
@@ -72,6 +89,19 @@ export const CharacterController = () => {
         movement.z = -1;
       }
       let speed = get().run ? RUN_SPEED : WALK_SPEED;
+
+      //Mouse Controller
+      if(isClicking.current){
+        console.log("clicking", mouse.x, mouse.y);
+        if (Math.abs(mouse.x) > 0.1){
+          movement.x = -mouse.x;
+        }
+       
+        movement.z = mouse.y + 0.4;
+        if (Math.abs(movement.x) > 0.5 || Math.abs(movement.z) > 0.5){
+          speed = RUN_SPEED;
+        }
+      }
 
       if (get().left) {
         movement.x = 1;
